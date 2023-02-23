@@ -1,0 +1,108 @@
+!contents -R2 -g -p -f -h
+!define TEST_SYSTEM {slim}
+//!define COMMAND_PATTERN {java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=1044 -cp %p %m}
+!path /Applications/FitnesseSlim/fitnesse.jar
+!path /Users/red1/Documents/workspace/FitnesseBudget360/bin/
+!path /Applications/Adempiere/lib/Adempiere.jar
+!path /Applications/Adempiere/lib/AdempiereCLib.jar
+!path /Applications/Adempiere/Budget360/FitnesseBudget360.jar
+
+!|import|
+|utils|
+|budget|
+
+!|ADempiere Login|
+|User     | Password|Client|Role|Login?|
+|GardenAdmin| GardenAdmin |GardenWorld|GardenWorld Admin|true|
+
+//master data setup Budget Config Purchasing Key > 11000 Checking to be non-doc
+//PopulateFacts setup 3 years of @Fact_Acct.Name data
+!|User Setup |
+| Business Partner |Organisation| Warehouse |Year Periods|Get Periods?|
+|Joe Block | HQ|HQ |2013|12|
+
+!|User Setup |
+|Year Periods|Initial Amount|Increment Amount|Populate Facts|Master Data?|Accounts Posting?|
+|2014|10|10|16100|true |I|
+
+//setup budget plan rules
+!|Budget Plan|
+|Business Partner|Is Sales Trx|Percentage Base|Account ID|Org|Period|Project|Product|Qty|CR Amount|Percent|Create?|
+|Joe Block|N|||HQ|Jun-14|Standard|Seeder|0|0|40|true|
+|Joe Block|Y|16100||HQ||Standard||0|0|32|true|
+||N|||||Standard|Hoe|0|1500|0|true|
+|Joe Block|N|16100|||||Seeder|0|0|30|true|
+||N||||||Hoe|50|0|0|true|
+||N||60130|||||0|1200|0|true|
+
+//execute transaction
+!|Budget Activity|
+|Transaction Type|Project|Product|Qty|Acct|Execute Transaction?|
+|Sales Order|Standard|Seeder|1||true|
+|Sales Order||Hoe|1||true|
+
+!|Budget Activity|
+|Config Years|Config Months|Trend|Update Revenue?|
+|0|12|A|true|
+
+!|Budget Activity|
+|Transaction Type|Project|Product|Qty|Acct|Execute Transaction?|
+|Purchase Order|Standard|Seeder|1||true|
+|Invoice Vendor| |Hoe|1||true|
+|Purchase Order||Hoe|1||true|
+|Purchase Order||Seeder|1||true|
+|GL Journal|||500|60130|true|
+
+!|Budget Activity|
+|Config Years|Config Months|Trend|Update Revenue?|
+|0|12|L|true|
+
+!|Budget Activity|
+|Transaction Type|Project|Product|Qty|Acct|Execute Transaction?|
+|Purchase Order|Standard|Seeder|1||true|
+|Invoice Vendor| |Hoe|1||true|
+|Purchase Order||Hoe|1||true|
+|Purchase Order||Seeder|1||true|
+|GL Journal|||500|60130|true|
+
+!|Budget Activity|
+|Config Years|Config Months|Trend|Update Revenue?|
+|0|12|P|true|
+
+!|Budget Activity|
+|Transaction Type|Project|Product|Qty|Acct|Execute Transaction?|
+|Purchase Order|Standard|Seeder|1||true|
+|Invoice Vendor| |Hoe|1||true|
+|Purchase Order||Hoe|1||true|
+|Purchase Order||Seeder|1||true|
+|GL Journal|||500|60130|true|
+
+//!|Budget Activity|
+//|Get Account?|
+//|true|
+
+!|Query:Check Notes|
+|Notice|Doc No|Message|Other Info|
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+|Notice||||
+
+//!|Query:Accounting Consequence|
+//|Table |Month |Record ID |Table Name |Doc Type |Product |Account |Debit |Credit|
+//|Fact_Acct | | | | | || ||
+
+!define COLLAPSE_SETUP {true}
+!define COLLAPSE_TEARDOWN {true}

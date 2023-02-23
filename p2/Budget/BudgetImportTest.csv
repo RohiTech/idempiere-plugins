@@ -1,0 +1,6 @@
+OrgDoc,Sales?,Account,PercentageBase,CreditAmt,DebitAmt,Percent,BPartner,Period,Product,Qty,Project,Campaign,Activity,Op,SubAccount,PeriodFrom,PeriodTo,SubAmount
+HQ,N,16500,41000,1000,200,40,JoeBlock,Jul-14,Seeder,25,Standard,,,-,41000,May-12,Jul-12,111
+,,,,,,,,,,,,,,+,,,,222
+,Y,16500,41000,,,12,,,,,,,,+,,,,333
+,,,,,,,,,,,,,,+,41000,Jan-12,Dec-12,
+HQ,N,,,,200,,,May-11,Hoe,21,Standard,Mailer,,,,,,
